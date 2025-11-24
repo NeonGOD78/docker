@@ -32,7 +32,7 @@ Set your variables:
 
 ```
 DOMAIN=example.com
-PLEX_HOST=plex
+SUBDOMAIN=plex
 TZ=Europe/Copenhagen
 PUID=1000
 PGID=1000
@@ -48,8 +48,18 @@ You may need to update:
 
 - volume paths
 - network names
-- Traefik labels (entrypoints, certresolver, etc.)
 - Plex claims if needed
+- Setup RAM transcoding
+    Create transcoding directory
+        sudo mkdir /opt/plex/tmp
+    Setup the system to mount the RAM disk on every boot
+        sudo nano /etc/fstab
+        Append the following line:
+        tmpfs    /opt/plex/tmp    tmpfs    defaults,noatime,nosuid,nodev,noexec,size=64G,mode=1777    0    0
+    Grant writing permissions for the transcoding directory
+        sudo chown -R plex:plex /tmp/transcoding
+    Use /tmp/transcoding in Plex Media Server > Settings > Server > Transcoder > Temporary directory
+
 
 Reference:  
 👉 https://docs.linuxserver.io/images/docker-plex/
