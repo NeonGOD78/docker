@@ -46,23 +46,73 @@ Adjust to match your user and timezone.
 
 You may need to update:
 
-- volume paths
-- network names
-- Plex claims if needed
-- Setup RAM transcoding
-    Create transcoding directory
-        sudo mkdir /opt/plex/tmp
-    Setup the system to mount the RAM disk on every boot
-        sudo nano /etc/fstab
-        Append the following line:
-        tmpfs    /opt/plex/tmp    tmpfs    defaults,noatime,nosuid,nodev,noexec,size=64G,mode=1777    0    0
-    Grant writing permissions for the transcoding directory
-        sudo chown -R plex:plex /tmp/transcoding
-    Use /tmp/transcoding in Plex Media Server > Settings > Server > Transcoder > Temporary directory
+- volume paths  
+- network names  
+- Plex claim (if needed)  
+- optional RAM transcoding setup  
 
-
-Reference:  
+For full configuration options, see the official docs:  
 👉 https://docs.linuxserver.io/images/docker-plex/
+
+---
+
+#### 🧠 Optional: Enable RAM Transcoding (`tmpfs`)
+
+If you want Plex to transcode in RAM instead of writing temporary files to disk (recommended if you have enough memory):
+
+---
+
+**1️⃣ Create a directory for transcoding:**
+
+```bash
+sudo mkdir -p /opt/plex/tmp
+```
+
+---
+
+**2️⃣ Mount it as a RAM disk via `/etc/fstab`:**
+
+```bash
+sudo nano /etc/fstab
+```
+
+Add this line to the bottom:
+
+```fstab
+tmpfs /opt/plex/tmp tmpfs defaults,noatime,nosuid,nodev,noexec,size=64G,mode=1777 0 0
+```
+
+> Adjust `size=64G` based on how much RAM you actually want Plex to use.
+
+---
+
+**3️⃣ Set permissions (LinuxServer.io containers typically run as PUID/PGID set in `.env`):**
+
+```bash
+sudo chown -R plex:plex /opt/plex/tmp
+```
+
+(If you use a different UID/GID, set them accordingly.)
+
+---
+
+**4️⃣ Update Plex transcoder directory:**
+
+Inside Plex:
+
+```
+Settings → Server → Transcoder → Temporary Directory
+```
+
+Set it to:
+
+```text
+/opt/plex/tmp
+```
+
+---
+
+RAM transcoding improves performance and avoids SSD wear — especially useful if you host multiple users or transcode 4K content.
 
 ---
 
