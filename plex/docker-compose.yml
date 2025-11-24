@@ -30,6 +30,13 @@ services:
       - wud.watch=true
       - wud.trigger.include=docker.update:all
 
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://127.0.0.1:32400/identity"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 60s
+
 networks:
   proxy:
     external: true
