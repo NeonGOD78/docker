@@ -10,9 +10,9 @@ services:
     expose:
       - 32400
     environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=Europe/Copenhagen
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
       - VERSION=docker
     volumes:
       - /opt/plex/config:/config
