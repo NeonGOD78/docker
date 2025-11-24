@@ -31,7 +31,7 @@ Before using this template, make sure you have:
 Set your variables:
 
 ```
-PLEX_DOMAIN=plex.example.com
+DOMAIN=example.com
 PLEX_HOST=plex
 TZ=Europe/Copenhagen
 PUID=1000
