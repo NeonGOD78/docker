@@ -1,1 +1,35 @@
+---
+services:
+  plex:
+    image: lscr.io/linuxserver/plex:latest
+    container_name: plex
+    hostname: plex
+    restart: unless-stopped
+    networks:
+      - proxy
+    expose:
+      - 32400
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Copenhagen
+      - VERSION=docker
+    volumes:
+      - /opt/plex/config:/config
+      - /opt/plex/tmp:/tmp
+      - /mnt/local/media/:/mnt/local/media
+    devices:
+      - /dev/dri:/dev/dri
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=proxy
+      - traefik.http.routers.plex.entrypoints=https
+      - traefik.http.routers.plex.rule=Host(`${SUBDOMAIN}.${DOMAIN}`)
+      - traefik.http.routers.plex.service=plex
+      - traefik.http.services.plex.loadbalancer.server.port=32400
+      - wud.watch=true
+      - wud.trigger.include=docker.update:all
 
+networks:
+  proxy:
+    external: true
